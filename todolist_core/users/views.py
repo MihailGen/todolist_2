@@ -4,8 +4,10 @@ from .models import User
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-
 from .serializers import RegisterSerializer
+from rest_framework import viewsets
+from .models import User
+from .permissions import CanEdit
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -20,3 +22,12 @@ class RegisterView(generics.CreateAPIView):
 
 class CustomView(APIView):
     permission_classes = [IsAuthenticated]
+
+
+class MyModelViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [CanEdit]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
