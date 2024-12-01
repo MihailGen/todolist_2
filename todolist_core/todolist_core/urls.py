@@ -21,6 +21,7 @@ from todolist import views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from users import urls as userurls
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,6 +38,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(userurls.urlpatterns)),
     path('basebase/', views.base),
     path('', include('todolist.urls', namespace='tasks')),
     path('api-auth/', include('rest_framework.urls')),
